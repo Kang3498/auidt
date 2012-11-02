@@ -1,0 +1,36 @@
+ml version="1.0" encoding="utf-8"?>
+<!--
+    Default configuration for various views to be rendered
+    TODO: Remove views that don't have custom configuration
+    TODO: Parameterize the custom width (200dip) in the below?
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <DialLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="DialLayout"
+        android:id="@+id/android_widget_DialLayout">
+    </DialLayout>
+    <DockLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="DockLayout"
+        android:id="@+id/android_widget_DockLayout">
+    </DockLayout>
+    <RollLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="RollLayout"
+        android:id="@+id/android_widget_RollLayout">
+    </RollLayout>
+    <RotationLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="RotationLayout"
+        android:id="@+id/android_widget_RotationLayout">     
+    </RotationLayout>
+</LinearLayout>

@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.android.ide.eclipse.auidt" default="build.jars" basedir=".">
+
+	<property name="p2.build.repo" value="file:${buildDirectory}/buildRepo"/>
+	<property name="basews" value="${ws}"/>
+	<property name="baseos" value="${os}"/>
+	<property name="basearch" value="${arch}"/>
+	<property name="basenl" value="${nl}"/>
+	<property name="bundleId" value="com.android.ide.eclipse.auidt"/>
+	<property name="bundleVersion" value="1.2.1.v201210260600"/>
+	<property name="p2.publishonerror" value="false"/>
+
+	<!-- Compiler settings. -->
+	<property name="javacFailOnError" value="false"/>
+	<property name="javacDebugInfo" value="on"/>
+	<property name="javacVerbose" value="false"/>
+	<property name="logExtension" value=".log"/>
+	<property name="compilerArg" value=""/>
+	<property name="compilation.prereq.log" value="${buildDirectory}/prereqErrors.log"/>
+	<property name="javacSource" value="1.3"/>
+	<property name="javacTarget" value="1.2"/>
+	<condition property="dir_bootclasspath" value="${java.home}/../Classes">
+		<os family="mac"/>
+	</condition>
+	<property name="dir_bootclasspath" value="${java.home}/lib"/>
+	<path id="path_bootclasspath">
+		<fileset dir="${dir_bootclasspath}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	<property name="bootclasspath" refid="path_bootclasspath"/>
+	<condition property="bundleBootClasspath" value="${JavaSE-1.6}"	>
+		<isset property="JavaSE-1.6"/>
+	</condition>
+	<condition property="bundleJavacSource" value="1.6"	>
+		<isset property="JavaSE-1.6"/>
+	</condition>
+	<condition property="bundleJavacTarget" value="1.6"	>
+		<isset property="JavaSE-1.6"/>
+	</condition>
+	<property name="bundleJavacSource" value="${javacSource}"/>
+	<property name="bundleJavacTarget" value="${javacTarget}"/>
+	<property name="bundleBootClasspath" value="${bootclasspath}"/>
+
+	<target name="init" depends="properties">
+		<condition property="pluginTemp" value="${buildTempFolder}/plugins"		>
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="pluginTemp" value="${basedir}"/>
+		<condition property="build.result.folder" value="${pluginTemp}/com.android.ide.eclipse.auidt_1.2.1.v201210260600"		>
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="build.result.folder" value="${basedir}"/>
+		<property name="temp.folder" value="${basedir}/temp.folder"/>
+		<property name="plugin.destination" value="${basedir}"/>
+		<condition property="p2.publish.parts" value="true"		>
+			<istrue value="${p2.gathering}"/>
+		</condition>
+		<property name="compilation.problem.marker" value="${build.result.folder}/compilation.problem"/>
+		<condition property="compilation.problem.marker.exists" value="true"		>
+			<and>
+			<available file="${compilation.problem.marker}"/>
+			<isfalse value="${p2.publishonerror}"/>
+			</and>
+		</condition>
+	</target>
+
+	<target name="properties" if="eclipse.running">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+
+	</target>
+
+	<target name="build.update.jar" depends="init" description="Build the plug-in: com.android.ide.eclipse.auidt for an update site.">
+		<delete dir="${temp.folder}"/>
+		<mkdir dir="${temp.folder}"/>
+		<antcall target="build.jars"/>
+		<antcall target="gather.bin.parts">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<jar destfile="${plugin.destination}/com.android.ide.eclipse.auidt_1.2.1.v201210260600.jar" basedir="${temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600" filesetmanifest="merge"/>
+		<delete dir="${temp.folder}"/>
+	</target>
+
+	<target name="@dot" depends="init" unless="@dot" description="Create jar: com.android.ide.eclipse.auidt @dot.">
+		<delete dir="${build.result.folder}/@dot"/>
+		<mkdir dir="${build.result.folder}/@dot"/>
+		<path id="@dot.classpath">
+			<pathelement path="../com.android.ide.eclipse.base/bin/"/>
+			<pathelement path="../com.android.ide.eclipse.base/@dot"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/androidprefs.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/common.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/commons-codec-1.4.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/commons-compress-1.0.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/commons-logging-1.1.1.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/guava-10.0.1.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/httpclient-4.1.1.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/httpcore-4.1.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/httpmime-4.1.1.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/sdklib.jar"/>
+			<pathelement path="../com.android.ide.eclipse.base/libs/sdkstats.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui_3.6.2.M20110203-1100.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.runtime_3.6.0.v20100505.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.osgi_3.6.2.R36x_v20110210.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.common_3.6.0.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.jobs_3.5.1.R36x_v20100824.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.runtime.compatibility.registry_3.3.0.v20100520/runtime_registry_compatibility.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.runtime.compatibility.registry_3.3.0.v20100520"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.registry_3.5.0.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.preferences_3.3.0.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.contenttype_3.4.100.v20100505-1235.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.runtime.compatibility.auth_3.2.200.v20100517.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.app_1.3.1.R36x_v20100803.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.osgi.services_3.2.100.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/javax.servlet_2.5.0.v200910301333.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.swt_3.6.2.v3659c.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.swt.gtk.linux.x86_64_3.6.2.v3659b.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jface_3.6.2.M20110210-1200.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.commands_3.6.0.I20100512-1500.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.workbench_3.6.2.M20110210-1200.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20100511-0800/compatibility.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20100511-0800/e4-workbench.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20100511-0800"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/com.ibm.icu_4.2.1.v20100412.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.help_3.5.0.v20100524.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.expressions_3.4.200.v20100505.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jface.databinding_1.4.0.I20100601-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.databinding.observable_1.3.0.I20100601-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.databinding.property_1.3.0.I20100601-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.databinding_1.3.100.I20100601-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.resources_3.6.1.R36x_v20110131-1630.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ant.core_3.2.201.v20110203_r362.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.variables_3.2.400.v20100505.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.filesystem_1.3.1.R36x_v20100727-0745.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.filesystem.linux.x86_64_1.2.0.v20100505-1235.jar"/>
+			<pathelement path="../com.android.ide.eclipse.ddms/bin/"/>
+			<pathelement path="../com.android.ide.eclipse.ddms/@dot"/>
+			<pathelement path="../com.android.ide.eclipse.ddms/libs/ddmlib.jar"/>
+			<pathelement path="../com.android.ide.eclipse.ddms/libs/ddmuilib.jar"/>
+			<pathelement path="../com.android.ide.eclipse.ddms/libs/jcommon-1.0.12.jar"/>
+			<pathelement path="../com.android.ide.eclipse.ddms/libs/jfreechart-1.0.9.jar"/>
+			<pathelement path="../com.android.ide.eclipse.ddms/libs/jfreechart-1.0.9-swt.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.console_3.5.0.v20100526.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jface.text_3.6.1.r361_v20100825-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.text_3.5.0.v20100601-1300.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.workbench.texteditor_3.6.1.r361_v20100714-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.compare.core_3.5.101.R36x_v20100929-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.ide_3.6.2.M20101201-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.views_3.5.1.M20110202-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.forms_3.5.2.r36_v20100702.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.p2.engine_2.0.1.R36x_v20110201.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.p2.core_2.0.3.R36x_v20110111.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.p2.metadata_2.0.1.R36x_v20101202.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.p2.repository_2.0.2.R36x_v20110111-1500.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.security_1.0.200.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ecf.filetransfer_4.0.0.v20100906-1425.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ecf_3.1.0.v20100906-1425.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ecf.ssl_1.0.100.v20100906-1425.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.concurrent_1.0.100.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ecf.identity_3.1.0.v20100906-1425.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ecf.provider.filetransfer_3.1.0.v20100906-1425.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ecf.provider.filetransfer.ssl_1.0.0.v20100906-1425.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.net_1.2.100.I20100511-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.net.linux.x86_64_1.1.0.I20100505-1245.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.p2.metadata.repository_1.1.0.v20100513.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.debug.core_3.6.0.v20100519.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.debug.ui_3.6.3.v20101201_r362.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.editors_3.6.1.r361_v20100825-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.core.filebuffers_3.5.100.v20100520-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt_3.6.1.v201102101200.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.intro_3.4.0.v20100427.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.help.base_3.5.3.v201102101200.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.http.jetty_2.0.0.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.http.servlet_1.1.0.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.mortbay.jetty.util_6.1.23.v201004211559.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.mortbay.jetty.server_6.1.23.v201004211559.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.jasper_5.5.17.v201004212143.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/javax.servlet.jsp_2.0.0.v200806031607.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.commons.el_1.0.0.v201004212143.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.commons.logging_1.0.4.v201005080501.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-antlr.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-bcel.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-bsf.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-log4j.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-oro.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-regexp.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-resolver.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-commons-logging.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-commons-net.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jai.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-javamail.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jdepend.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jmf.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jsch.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-junit.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-launcher.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-netrexx.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-nodeps.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-starteam.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-stylebook.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-swing.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-trax.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-weblogic.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.lucene_1.9.1.v20100518-1140.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.lucene.analysis_1.9.1.v20100518-1140.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.cheatsheets_3.4.0.v20100427.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.help.ui_3.5.3.r36_20101116.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.core_3.6.2.v_A76_R36x.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.compiler.tool_1.0.100.v_A76_R36x.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.compiler.apt_1.0.300.v20100513-0845.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.team.core_3.5.101.R36x_v20110203-1036.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.ui_3.6.2.r362_v20110203.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.search_3.6.0.v20100520-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ltk.core.refactoring_3.5.101.r362_v20101117-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ltk.ui.refactoring_3.5.0.v20100526-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.navigator_3.5.0.I20100601-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.compare_3.5.101.R36x_v20100929-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.team.ui_3.5.102.R36x_v20110203-1036.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.launching_3.5.200.v20110105_r362.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.debug_3.6.1.v20100715_r361/jdi.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.debug_3.6.1.v20100715_r361/jdimodel.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.debug_3.6.1.v20100715_r361/tools.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.navigator.resources_3.4.202.M20101124-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.views.properties.tabbed_3.5.100.I20100509-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.core.manipulation_1.3.0.v20100520-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.ui.browser_3.3.1.r36_20101216.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.sse.core_1.1.504.v201102160550.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.uriresolver_1.1.401.v201004280700.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.emf.common_2.6.0.v20100914-1218.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.validation_1.2.201.v201101270100.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.frameworks_1.2.0.v201003040800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.environment_1.0.400.v200912181832.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.osgi.util_3.2.100.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.emf.ecore_2.6.1.v20100914-1218.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.core_1.2.0.v200908252030.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.project.facet.core_1.4.102.v201008170019.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.sse.ui_1.2.3.v201102102045.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.xml.core_1.1.503.v201102102045.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.xerces_2.9.0.v201005080400.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/javax.xml_1.3.4.v201005080400.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.xml.resolver_1.2.0.v201005080400.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.apache.xml.serializer_2.7.1.v201005080400.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jem.util_2.1.3.v201012070000.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.emf.ecore.xmi_2.5.0.v20100521-1846.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.emf_1.2.3.v201012100400.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.emfworkbench.integration_1.2.3.v201012020600.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.emf.edit_2.6.0.v20100914-1218.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.emf.ecore.change_2.5.1.v20100907-1643.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.xml.ui_1.1.103.v201101122108.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.wst.common.ui_1.1.500.v200911190730.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.junit_3.6.1.r361_v20100825-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.debug.ui_3.5.2.v20100928a_r362.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.junit.runtime_3.4.200.v20100526-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.junit_4.8.1.v4_8_1_v20100427-1100/junit.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.jdt.junit.core_3.6.1.r361_v20100825-0800.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.simpleconfigurator.manipulator_2.0.0.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.frameworkadmin_2.0.0.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.frameworkadmin.equinox_1.0.200.v20100505.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/org.eclipse.equinox.simpleconfigurator_1.0.200.v20100503.jar"/>
+			<pathelement path="../../../../../../buildbot/eclipse-android/3.6.2/eclipse/plugins/com.android.ide.eclipse.adt_20.0.1.v201207132230-403220.jar"/>
+			<pathelement path="libs/sdkuilib.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/sdkuilib.jar"/>
+			<pathelement path="libs/ninepatch.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/ninepatch.jar"/>
+			<pathelement path="libs/kxml2-2.3.0.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/kxml2-2.3.0.jar"/>
+			<pathelement path="libs/freemarker-2.3.19.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/freemarker-2.3.19.jar"/>
+			<pathelement path="libs/layoutlib_api.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/layoutlib_api.jar"/>
+			<pathelement path="libs/ide_common.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/ide_common.jar"/>
+			<pathelement path="libs/rule_api.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/rule_api.jar"/>
+			<pathelement path="libs/assetstudio.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/assetstudio.jar"/>
+			<pathelement path="libs/lint_api.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/lint_api.jar"/>
+			<pathelement path="libs/lint_checks.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/lint_checks.jar"/>
+			<pathelement path="libs/lombok-ast-0.2.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/lombok-ast-0.2.jar"/>
+			<pathelement path="libs/asm-4.0.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/asm-4.0.jar"/>
+			<pathelement path="libs/asm-tree-4.0.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/asm-tree-4.0.jar"/>
+			<pathelement path="libs/propertysheet.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/propertysheet.jar"/>
+			<pathelement path="libs/ant-glob.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/ant-glob.jar"/>
+			<pathelement path="libs/swtmenubar.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/swtmenubar.jar"/>
+			<pathelement path="libs/manifmerger.jar"/>
+			<pathelement path="${build.result.folder}/../com.android.ide.eclipse.auidt_1.2.1.v201210260600/libs/manifmerger.jar"/>
+		</path>
+		<!-- compile the source code -->
+		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}" errorProperty="compilation.error.occured"		>
+			<compilerarg line="${compilerArg}" compiler="${build.compiler}"/>
+			<classpath refid="@dot.classpath" />
+			<src path="src/"			/>
+			<compilerarg value="@${basedir}/javaCompiler...args" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"			/>
+			<compilerarg line="-log &apos;${build.result.folder}/@dot${logExtension}&apos;" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"			/>
+		</javac>
+		<antcall target="checkCompilationResults"/>
+		<!-- Copy necessary resources -->
+		<copy todir="${build.result.folder}/@dot" failonerror="true" overwrite="false">
+			<fileset dir="src/">
+				<exclude name="**/*.java"/>
+				<exclude name="**/package.htm*"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="src.zip" depends="init" unless="src.zip">
+		<mkdir dir="${build.result.folder}"/>
+		<antcall target="zip.src.zip"/>
+	</target>
+	<target name="zip.src.zip">
+		<zip destfile="${build.result.folder}/src.zip" filesonly="false" whenempty="skip" update="false">
+			<fileset dir="src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</zip>
+	</target>
+	<target name="copy.src.zip">
+		<copy todir="${source.destination.folder}/" failonerror="true" overwrite="true">
+			<fileset dir="src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build.jars" depends="init" description="Compile classes and build nested jars for the plug-in: com.android.ide.eclipse.auidt.">
+		<delete file="${compilation.problem.marker}" quiet="true"/>
+		<available property="@dot" file="${build.result.folder}/@dot"/>
+		<antcall target="@dot"/>
+	</target>
+
+	<target name="checkCompilationResults" if="compilation.error.occured">
+		<echo file="${compilation.problem.marker}" message="com.android.ide.eclipse.auidt_1.2.1.v201210260600${line.separator}compilation.error.occured=${compilation.error.occured}"/>
+		<eclipse.logCompileError bundle="com.android.ide.eclipse.auidt_1.2.1.v201210260600" log="${compilation.prereq.log}">
+			<include name="/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.base/compilation.problem"/>
+			<include name="${pluginTemp}/com.android.ide.eclipse.base_20.0.1.v201210260600/compilation.problem"/>
+			<include name="/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.ddms/compilation.problem"/>
+			<include name="${pluginTemp}/com.android.ide.eclipse.ddms_20.0.1.v201210260600/compilation.problem"/>
+		</eclipse.logCompileError>
+	</target>
+
+	<target name="build.sources" depends="init">
+		<available property="src.zip" file="${build.result.folder}/src.zip"/>
+		<antcall target="src.zip"/>
+	</target>
+
+	<target name="publish.bin.parts" depends="init" if="p2.publish.parts" unless="compilation.problem.marker.exists">
+		<mkdir dir="${build.result.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600"/>
+		<copy todir="${build.result.folder}" failonerror="true" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="META-INF/MANIFEST.MF"/>
+				<include name="plugin.xml"/>
+				<include name="fragment.xml"/>
+				<exclude name="libs/.gitignore"/>
+			</fileset>
+		</copy>
+		<eclipse.versionReplacer path="${build.result.folder}" version="1.2.1.v201210260600"/>
+		<antcall target="apitools.generation">
+			<param name="target.folder" value="${build.result.folder}"/>
+			<param name="projectLocation" value="${basedir}"/>
+			<param name="binary.folders" value="${build.result.folder}/@dot:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/kxml2-2.3.0.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/ant-glob.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/layoutlib_api.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/ninepatch.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/lint_api.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/asm-tree-4.0.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/assetstudio.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/lombok-ast-0.2.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/propertysheet.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/rule_api.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/ide_common.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/asm-4.0.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/freemarker-2.3.19.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/swtmenubar.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/sdkuilib.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/manifmerger.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/lint_checks.jar"/>
+			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
+		</antcall>
+		<eclipse.gatherBundle 
+		   metadataRepository="${p2.build.repo}"
+		   artifactRepository="${p2.build.repo}"
+		   buildResultFolder="${build.result.folder}"
+		   unpack="false"
+		   baseDirectory="${basedir}"
+		/>
+	</target>
+
+	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600"/>
+		<copy todir="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600" failonerror="true" overwrite="false">
+			<fileset dir="${build.result.folder}/@dot">
+				<include name="**"/>
+				<exclude name="libs/.gitignore"/>
+			</fileset>
+		</copy>
+		<copy todir="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600" failonerror="true" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="plugin.xml"/>
+				<include name="META-INF/"/>
+				<include name="icons/"/>
+				<include name="templates/"/>
+				<include name="about.ini"/>
+				<include name="libs/"/>
+				<include name="about.properties"/>
+				<include name="NOTICE"/>
+				<include name="about.html"/>
+				<include name="armeabi/"/>
+				<include name="auidt/"/>
+				<exclude name="libs/.gitignore"/>
+			</fileset>
+		</copy>
+		<eclipse.versionReplacer path="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600" version="1.2.1.v201210260600"/>
+		<antcall target="apitools.generation">
+			<param name="target.folder" value="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600"/>
+			<param name="projectLocation" value="${basedir}"/>
+			<param name="binary.folders" value="${build.result.folder}/@dot:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/kxml2-2.3.0.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/ant-glob.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/layoutlib_api.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/ninepatch.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/lint_api.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/asm-tree-4.0.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/assetstudio.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/lombok-ast-0.2.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/propertysheet.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/rule_api.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/ide_common.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/asm-4.0.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/freemarker-2.3.19.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/swtmenubar.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/sdkuilib.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/manifmerger.jar:/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt/libs/lint_checks.jar"/>
+			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
+		</antcall>
+	</target>
+
+	<target name="build.zips" depends="init">
+	</target>
+
+	<target name="gather.sources" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600"/>
+		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600" failonerror="false" overwrite="false"/>
+		<antcall target="copy.src.includes">
+			<param name="source.destination.folder" value="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600"/>
+		</antcall>
+	</target>
+
+	<target name="gather.individual.sources" depends="init">
+		<antcall target="copy.src.zip">
+			<param name="source.destination.folder" value="${destination.temp.folder}"/>
+		</antcall>
+		<antcall target="copy.src.includes">
+			<param name="source.destination.folder" value="${destination.temp.folder}"/>
+		</antcall>
+	</target>
+
+	<target name="copy.src.includes" depends="init">
+	</target>
+
+	<target name="gather.logs" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600"/>
+		<copy todir="${destination.temp.folder}/com.android.ide.eclipse.auidt_1.2.1.v201210260600" failonerror="false" overwrite="false">
+			<fileset dir="${build.result.folder}">
+				<include name="@dot${logExtension}"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean" depends="init" description="Clean the plug-in: com.android.ide.eclipse.auidt of all the zips, jars and logs created.">
+		<delete dir="${build.result.folder}/@dot"/>
+		<delete file="${build.result.folder}/src.zip"/>
+		<delete file="${plugin.destination}/com.android.ide.eclipse.auidt_1.2.1.v201210260600.jar"/>
+		<delete file="${plugin.destination}/com.android.ide.eclipse.auidt_1.2.1.v201210260600.zip"/>
+		<delete dir="${temp.folder}"/>
+		<delete file="${compilation.problem.marker}" quiet="true"/>
+	</target>
+
+	<target name="refresh" depends="init" if="eclipse.running" description="Refresh this folder.">
+		<eclipse.convertPath fileSystemPath="/root/myGit/sdk/eclipse/plugins/com.android.ide.eclipse.auidt" property="resourcePath"/>
+		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite"/>
+	</target>
+
+	<target name="zip.plugin" depends="init" description="Create a zip containing all the elements for the plug-in: com.android.ide.eclipse.auidt.">
+		<delete dir="${temp.folder}"/>
+		<mkdir dir="${temp.folder}"/>
+		<antcall target="build.jars"/>
+		<antcall target="build.sources"/>
+		<antcall target="gather.bin.parts">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<antcall target="gather.sources">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<delete>
+			<fileset dir="${temp.folder}">
+				<include name="**/*.bin${logExtension}"/>
+			</fileset>
+		</delete>
+		<zip destfile="${plugin.destination}/com.android.ide.eclipse.auidt_1.2.1.v201210260600.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
+		<delete dir="${temp.folder}"/>
+	</target>
+
+	<target name="apitools.generation" if="generateAPIDescription">
+		<apitooling.apigeneration  projectName="${projectName}" project="${projectLocation}" binary="${binary.folders}" target="${target.folder}" extramanifests="${extraManifests}"		/>
+	</target>
+
+</project>

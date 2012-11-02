@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+        Palette Metadata
+
+        This document provides additional designtime metadata for various Android views, such as
+        logical palette categories (as well as a natural ordering of the views within their
+        categories, fill-preferences (how a view will sets its width and height attributes when
+        dropped into other views), and so on.
+    -->
+<!DOCTYPE metadata [
+<!--- The metadata consists of a series of category definitions -->
+<!ELEMENT metadata (category)*>
+<!--- Each category has a name and contains a list of views in order -->
+<!ELEMENT category (view)*>
+<!ATTLIST category name CDATA #IMPLIED>
+<!--- Each view is identified by its full class name and has various
+      other attributes such as a fill preference  -->
+<!ELEMENT view (view)*>
+<!ATTLIST view
+    class CDATA #IMPLIED
+    name CDATA #IMPLIED
+    init CDATA #IMPLIED
+    icon CDATA #IMPLIED
+    relatedTo CDATA #IMPLIED
+    skip (true|false) "false"
+    render (alone|skip|normal) "normal"
+    fill (none|both|width|height|opposite|width_in_vertical|height_in_horizontal) "none"
+    resize (full|none|horizontal|vertical|scaled) "full"
+    topAttrs CDATA #IMPLIED
+>
+]>
+<metadata>
+    <category
+        name="3D Menu">       
+        <view
+            class="android.widget.DialLayout"
+            topAttrs="src,scaleType"
+            resize="scaled"
+            relatedTo="" />
+        <view
+            class="android.widget.DockLayout"
+            topAttrs="src,scaleType"
+            resize="scaled"
+            relatedTo="" />
+        <view
+            class="android.widget.RollLayout"
+            topAttrs="src,scaleType"
+            resize="scaled"
+            relatedTo="" />
+        <view
+            class="android.widget.RotationLayout"
+            topAttrs="src,scaleType"
+            resize="scaled"
+            relatedTo="" />
+        
+    </category>
+    <!--  TODO: Add-ons? -->
+</metadata>

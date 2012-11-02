@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="https://kang3498.cafe24.com/auidt/">
+      Update Site for Android 3D Development Toolkit
+   </description>
+   <feature url="features/com.android.ide.eclipse.auidt_1.2.1.qualifier.jar" id="com.android.ide.eclipse.auidt" version="1.2.1.qualifier">
+      <category name="developer"/>
+   </feature>
+   <feature url="features/com.android.ide.eclipse.ddms_1.2.1.qualifier.jar" id="com.android.ide.eclipse.ddms" version="1.2.1.qualifier">
+      <category name="developer"/>
+   </feature>
+
+   <category-def name="developer" label="AUIDT">
+      <description>
+         test
+      </description>
+   </category-def>
+</site>
